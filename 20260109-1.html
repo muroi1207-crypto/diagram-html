@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>【図解】次世代ハイブリッド物販モデル</title>
+    <style>
+        /* Base Reset & Fonts */
+        :root {
+            --primary: #1e3a8a; /* Midnight Blue */
+            --accent: #f97316;  /* Vivid Orange */
+            --success: #10b981; /* Emerald Green */
+            --bg: #f8fafc;
+            --text: #334155;
+            --white: #ffffff;
+        }
+        body {
+            font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.8;
+            margin: 0;
+            overflow-x: hidden;
+        }
+
+        /* Utility Classes */
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        .text-center { text-align: center; }
+        .font-bold { font-weight: 700; }
+        .text-primary { color: var(--primary); }
+        .text-accent { color: var(--accent); }
+        .flex { display: flex; }
+        .flex-col { flex-direction: column; }
+        .items-center { align-items: center; }
+        .justify-center { justify-content: center; }
+        .gap-4 { gap: 1rem; }
+        .mt-10 { margin-top: 2.5rem; }
+        .mb-10 { margin-bottom: 2.5rem; }
+        .p-6 { padding: 1.5rem; }
+        .rounded-lg { border-radius: 0.5rem; }
+        .shadow-lg { box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); }
+        .bg-white { background-color: var(--white); }
+
+        /* Animation Classes */
+        .fade-in-section {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+            will-change: opacity, visibility;
+        }
+        .fade-in-section.is-visible {
+            opacity: 1;
+            transform: none;
+        }
+
+        /* Hero Section */
+        header {
+            background: linear-gradient(135deg, var(--primary), #1e293b);
+            color: var(--white);
+            padding: 80px 20px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            line-height: 1.2;
+        }
+        header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        .scroll-indicator {
+            margin-top: 40px;
+            animation: bounce 2s infinite;
+        }
+
+        /* Sections */
+        section {
+            padding: 80px 0;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        h2 {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            color: var(--primary);
+            text-align: center;
+            position: relative;
+        }
+        h2::after {
+            content: '';
+            display: block;
+            width: 60px;
+            height: 4px;
+            background: var(--accent);
+            margin: 10px auto 0;
+            border-radius: 2px;
+        }
+
+        /* Custom Visuals */
+        .card {
+            background: var(--white);
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            transition: transform 0.3s;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        /* Comparison Chart */
+        .comparison {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        .comparison-box {
+            flex: 1;
+            min-width: 280px;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        .comparison-bad {
+            background-color: #f1f5f9;
+            border: 2px solid #cbd5e1;
+            color: #64748b;
+        }
+        .comparison-good {
+            background-color: #fff7ed;
+            border: 2px solid var(--accent);
+            color: var(--primary);
+            position: relative;
+        }
+        .comparison-good::before {
+            content: 'NEW';
+            position: absolute;
+            top: -12px;
+            right: 20px;
+            background: var(--accent);
+            color: white;
+            font-size: 12px;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-weight: bold;
+        }
+
+        /* Diagram: Supply Chain */
+        .supply-chain {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin: 40px 0;
+            flex-wrap: wrap;
+        }
+        .node {
+            background: var(--white);
+            padding: 15px 25px;
+            border-radius: 8px;
+            border: 2px solid var(--primary);
+            font-weight: bold;
+            position: relative;
+        }
+        .node.old {
+            border-color: #94a3b8;
+            color: #94a3b8;
+            text-decoration: line-through;
+        }
+        .arrow {
+            font-size: 24px;
+            color: var(--primary);
+        }
+        .arrow.cross {
+            color: #ef4444;
+        }
+
+        /* Graph Animation */
+        .graph-container {
+            position: relative;
+            height: 300px;
+            background: var(--white);
+            border-left: 2px solid #333;
+            border-bottom: 2px solid #333;
+            margin: 40px auto;
+            max-width: 600px;
+            overflow: hidden;
+        }
+        .graph-line {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 0;
+            border-top: 4px solid var(--success);
+            transform-origin: left bottom;
+            transition: width 2s linear;
+        }
+        .graph-label {
+            position: absolute;
+            font-size: 12px;
+            color: #666;
+        }
+        .zone-red {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 30%;
+            height: 100%;
+            background: rgba(239, 68, 68, 0.1);
+            border-right: 1px dashed #ef4444;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ef4444;
+            font-weight: bold;
+            writing-mode: vertical-rl;
+        }
+        .zone-green {
+            position: absolute;
+            bottom: 0;
+            left: 30%;
+            width: 70%;
+            height: 100%;
+            background: rgba(16, 185, 129, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--success);
+            font-weight: bold;
+        }
+        /* SVG Path for Graph */
+        svg.graph-svg {
+            width: 100%;
+            height: 100%;
+        }
+        path.line-path {
+            fill: none;
+            stroke: var(--success);
+            stroke-width: 4;
+            stroke-dasharray: 1000;
+            stroke-dashoffset: 1000;
+            transition: stroke-dashoffset 2.5s ease-out;
+        }
+        .graph-container.active path.line-path {
+            stroke-dashoffset: 0;
+        }
+
+        /* Step List */
+        .step-list {
+            list-style: none;
+            padding: 0;
+        }
+        .step-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 30px;
+            position: relative;
+        }
+        .step-number {
+            background: var(--primary);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            flex-shrink: 0;
+            margin-right: 20px;
+            z-index: 2;
+        }
+        .step-item::after {
+            content: '';
+            position: absolute;
+            left: 19px;
+            top: 40px;
+            width: 2px;
+            height: calc(100% + 10px);
+            background: #e2e8f0;
+            z-index: 1;
+        }
+        .step-item:last-child::after { display: none; }
+        .step-content h3 { margin: 0 0 10px 0; color: var(--primary); }
+
+        /* Accordion */
+        .accordion {
+            background: var(--white);
+            border-radius: 8px;
+            margin-top: 10px;
+            overflow: hidden;
+            border: 1px solid #e2e8f0;
+        }
+        .accordion-header {
+            padding: 15px 20px;
+            background: #f8fafc;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: bold;
+        }
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+            padding: 0 20px;
+        }
+        .accordion-content p {
+            padding: 15px 0;
+            margin: 0;
+            border-top: 1px solid #f1f5f9;
+        }
+        .accordion.active .accordion-content {
+            max-height: 200px; /* Approximate height */
+        }
+        .accordion-icon {
+            transition: transform 0.3s;
+        }
+        .accordion.active .accordion-icon {
+            transform: rotate(180deg);
+        }
+
+        /* SVG Icons */
+        .icon-svg {
+            width: 60px;
+            height: 60px;
+            margin-bottom: 15px;
+            fill: var(--primary);
+        }
+
+        /* Footer */
+        footer {
+            background: #1e293b;
+            color: #94a3b8;
+            padding: 40px 20px;
+            text-align: center;
+            font-size: 0.9rem;
+        }
+        
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {transform: translateY(0);}
+            40% {transform: translateY(-10px);}
+            60% {transform: translateY(-5px);}
+        }
+
+        /* Mobile Adjustments */
+        @media (max-width: 600px) {
+            header h1 { font-size: 1.8rem; }
+            .comparison { flex-direction: column; }
+            .supply-chain { flex-direction: column; }
+            .arrow { transform: rotate(90deg); }
+            .arrow.cross { transform: rotate(0); } /* Keep X as is */
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <h1>次世代ハイブリッド物販<br><span style="color: var(--accent);">「共創型」エコシステム</span></h1>
+            <p>教育 × 代行 × 自動化で実現する<br>持続可能なビジネスモデルの全貌</p>
+            <div class="scroll-indicator">
+                <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M7 13l5 5 5-5M7 6l5 5 5-5"/>
+                </svg>
+            </div>
+        </div>
+    </header>
+
+    <!-- Intro: The Problem -->
+    <section id="intro">
+        <div class="container">
+            <div class="fade-in-section">
+                <h2>なぜ今、モデルチェンジなのか？</h2>
+                <p class="text-center">従来の「丸投げ型」運営代行は、構造的な限界を迎えていました。</p>
+                
+                <div class="comparison mt-10">
+                    <div class="comparison-box comparison-bad">
+                        <!-- Icon: Tired Person -->
+                        <svg class="icon-svg" viewBox="0 0 24 24" style="fill:#64748b;">
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
+                        </svg>
+                        <h3>これまでの課題</h3>
+                        <ul style="text-align:left; padding-left: 20px;">
+                            <li>全てお任せ＝価値が伝わらない</li>
+                            <li>顧客の知識不足で質問が殺到</li>
+                            <li>利益が出ないとすぐ解約される</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="comparison-box comparison-good">
+                        <!-- Icon: Handshake/Teamwork -->
+                        <svg class="icon-svg" viewBox="0 0 24 24">
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>
+                        </svg>
+                        <h3>新しい解決策</h3>
+                        <ul style="text-align:left; padding-left: 20px;">
+                            <li>教育＋代行のハイブリッド</li>
+                            <li>顧客自身が成長し自走する</li>
+                            <li>月額サブスクで安価に参入</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Core 1: Supply Chain Revolution -->
+    <section style="background-color: #f1f5f9;">
+        <div class="container">
+            <div class="fade-in-section">
+                <h2>仕組み①：仕入れの「中抜き」革命</h2>
+                <p class="text-center">利益率を圧迫していた「Amazon仕入れ」から脱却し、<br>製造元に近い「1688（中国卸）」へ直結します。</p>
+
+                <div class="supply-chain">
+                    <div class="node old">Amazon<br><small>(小売店)</small></div>
+                    <div class="arrow cross">×</div>
+                    <div class="node" style="border-color:var(--accent); background:#fff7ed;">ユーザー</div>
+                    <div class="arrow">←</div>
+                    <div class="node" style="background:var(--primary); color:white;">1688<br><small>(工場の直売所)</small></div>
+                </div>
+
+                <div class="card text-center">
+                    <h3 class="text-primary">Temu / TikTokとの連携</h3>
+                    <p>仕入れた商品は、今最も勢いのある「TikTok Shop」や「Temu」で販売。<br>
+                    Amazonとは異なる<strong>「発見型」のアルゴリズム</strong>を持つ市場を攻めます。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Core 2: Strategy (Negative Sales) -->
+    <section>
+        <div class="container">
+            <div class="fade-in-section">
+                <h2>仕組み②：「損して得取れ」戦略</h2>
+                <p class="text-center">最初の1〜3ヶ月は意図的に利益を出しません。<br>これを<strong>「失敗」ではなく「広告費」</strong>と定義します。</p>
+
+                <div class="graph-container" id="profitGraph">
+                    <div class="zone-red">準備・投資期間</div>
+                    <div class="zone-green">回収・利益期間</div>
+                    
+                    <svg class="graph-svg" viewBox="0 0 600 300" preserveAspectRatio="none">
+                        <!-- X/Y Axis -->
+                        <line x1="0" y1="300" x2="600" y2="300" stroke="#333" stroke-width="2"/>
+                        <line x1="0" y1="0" x2="0" y2="300" stroke="#333" stroke-width="2"/>
+                        
+                        <!-- The Line: Starts negative (below middle), goes up -->
+                        <!-- Let's say y=150 is 0 profit. 300 is bottom. -->
+                        <!-- Path: Start(0, 250) -> Month3(180, 250) -> Month4(240, 100) -> Month6(600, 50) -->
+                        <path class="line-path" d="M0,280 Q150,280 180,280 C220,280 250,150 600,20" />
+                    </svg>
+                    
+                    <div style="position:absolute; top: 20px; right: 20px; color:var(--success); font-weight:bold;">利益爆発</div>
+                    <div style="position:absolute; bottom: 30px; left: 20px; color:#ef4444; font-weight:bold;">マイナス販売</div>
+                </div>
+
+                <div class="accordion">
+                    <div class="accordion-header">
+                        なぜわざわざ赤字にするの？
+                        <span class="accordion-icon">▼</span>
+                    </div>
+                    <div class="accordion-content">
+                        <p>TikTokやTemuでは「販売実績」が最強のSEOです。商品を原価割れ（マイナス）で販売することで、ライバルより圧倒的に早く販売実績を作り、プラットフォームから「人気商品」と認定され、莫大なインプレッション（表示回数）を獲得するためです。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Core 3: Roadmap -->
+    <section style="background-color: #f1f5f9;">
+        <div class="container">
+            <div class="fade-in-section">
+                <h2>仕組み③：成長ロードマップ</h2>
+                <p class="text-center">「教育」と「ツール」をセットで提供し、<br>段階的に収益を拡大させます。</p>
+
+                <ul class="step-list mt-10">
+                    <li class="step-item">
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                            <h3>土台作り（初級）</h3>
+                            <p>月額22,000円のスクールに入会。AIを活用したマニュアルで基礎を学習しつつ、ツール（VPS）の設定済みアカウントを受け取ります。</p>
+                        </div>
+                    </li>
+                    <li class="step-item">
+                        <div class="step-number">2</div>
+                        <div class="step-content">
+                            <h3>アカウント育成（中級）</h3>
+                            <p>マイナス販売戦略を実行。利益は出ませんが、アカウントの評価（パワー）を徹底的に上げます。1688仕入れのノウハウも習得。</p>
+                        </div>
+                    </li>
+                    <li class="step-item">
+                        <div class="step-number">3</div>
+                        <div class="step-content">
+                            <h3>収益化・多角化（上級）</h3>
+                            <p>育ったアカウントで利益回収を開始。さらに、メルカリ、バイマ、Shopifyなど他プラットフォームへも横展開し、リスクを分散します。</p>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Conclusion -->
+    <section>
+        <div class="container text-center">
+            <div class="fade-in-section">
+                <h2 style="border:none;">未来への投資</h2>
+                <p class="mb-10">
+                    このモデルは、単なる「転売」ではありません。<br>
+                    <strong>「教育」によるスキル定着</strong>と<strong>「自動化」による効率化</strong>を組み合わせた、<br>
+                    強固なビジネス資産構築プロジェクトです。
+                </p>
+                <div style="background: var(--primary); color: white; padding: 20px; border-radius: 8px; display: inline-block;">
+                    <h3 style="color:white; margin:0;">2026年、新体制スタート</h3>
+                    <p style="margin:5px 0 0;">TikTok × Temu × 教育スクール</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Reference / Footer -->
+    <footer>
+        <div class="container">
+            <p>※本図解は会議録に基づいたコンセプトモデルです。</p>
+            <p>関連用語: TikTok Shop, Temu, 1688(Alibaba), VPS, AI Automation</p>
+            <p>&copy; 2026 Hybric EC Model Visualizer</p>
+        </div>
+    </footer>
+
+    <!-- Scripts for Interactivity -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // 1. Intersection Observer for Fade-in animations
+            const observerOptions = {
+                root: null,
+                rootMargin: '0px',
+                threshold: 0.2
+            };
+
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('is-visible');
+                        
+                        // Check if this is the graph section
+                        const graphContainer = entry.target.querySelector('.graph-container');
+                        if (graphContainer) {
+                            setTimeout(() => {
+                                graphContainer.classList.add('active');
+                            }, 500);
+                        }
+                    }
+                });
+            }, observerOptions);
+
+            document.querySelectorAll('.fade-in-section').forEach(section => {
+                observer.observe(section);
+            });
+
+            // 2. Accordion Logic
+            const accordions = document.querySelectorAll('.accordion-header');
+            accordions.forEach(acc => {
+                acc.addEventListener('click', function() {
+                    const parent = this.parentElement;
+                    parent.classList.toggle('active');
+                });
+            });
+        });
+    </script>
+</body>
+</html>
