@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI × イノベーション普及理論 | 5分でわかる図解ガイド</title>
+    <style>
+        /* --- Base Reset & Variables --- */
+        :root {
+            --primary: #6366f1; /* AI Purple */
+            --primary-dark: #4338ca;
+            --secondary: #0ea5e9; /* Sky Blue */
+            --accent: #f59e0b; /* Amber */
+            --danger: #ef4444; /* Red */
+            --dark: #1e293b;
+            --gray: #64748b;
+            --light: #f8fafc;
+            --white: #ffffff;
+            --chasm-bg: #111827;
+            
+            --curve-innovator: #ef4444;
+            --curve-early-adapter: #f97316;
+            --curve-early-majority: #3b82f6;
+            --curve-late-majority: #6366f1;
+            --curve-laggard: #94a3b8;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
+            background-color: var(--light);
+            color: var(--dark);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        a { text-decoration: none; color: inherit; }
+        ul { list-style: none; }
+
+        /* --- Typography --- */
+        h1, h2, h3 {
+            font-weight: 700;
+            line-height: 1.3;
+        }
+
+        .text-center { text-align: center; }
+        .text-gradient {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .font-bold { font-weight: 700; }
+        .text-sm { font-size: 0.875rem; }
+        .text-lg { font-size: 1.125rem; }
+        .mb-2 { margin-bottom: 0.5rem; }
+        .mb-4 { margin-bottom: 1rem; }
+        .mb-8 { margin-bottom: 2rem; }
+
+        /* --- Layout Containers --- */
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        section {
+            padding: 80px 0;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        /* --- Components --- */
+        .btn {
+            display: inline-block;
+            padding: 12px 32px;
+            background: var(--primary);
+            color: white;
+            border-radius: 50px;
+            font-weight: bold;
+            transition: transform 0.2s, box-shadow 0.2s;
+            cursor: pointer;
+        }
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+        }
+
+        .card {
+            background: var(--white);
+            border-radius: 16px;
+            padding: 32px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            margin-bottom: 24px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border-left: 6px solid transparent;
+        }
+        
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 12px;
+        }
+
+        /* --- Hero Section --- */
+        .hero {
+            min-height: 90vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            background: radial-gradient(circle at top right, #e0e7ff, #f8fafc);
+            position: relative;
+        }
+        
+        .scroll-down {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: bounce 2s infinite;
+            opacity: 0.6;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {transform: translateY(0) translateX(-50%);}
+            40% {transform: translateY(-10px) translateX(-50%);}
+            60% {transform: translateY(-5px) translateX(-50%);}
+        }
+
+        /* --- Bell Curve Visualization --- */
+        .chart-container {
+            position: relative;
+            height: 200px;
+            margin: 40px 0;
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+        }
+        
+        .curve-bar {
+            width: 19%;
+            border-radius: 8px 8px 0 0;
+            position: relative;
+            transition: height 1s ease, opacity 0.3s ease;
+            opacity: 0.3;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 0.9rem;
+            padding-bottom: 10px;
+        }
+        
+        .curve-bar.active {
+            opacity: 1;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+
+        /* Heights representing the bell curve */
+        .bar-1 { height: 10%; background: var(--curve-innovator); } /* 2.5% */
+        .bar-2 { height: 35%; background: var(--curve-early-adapter); } /* 13.5% */
+        .bar-3 { height: 80%; background: var(--curve-early-majority); } /* 34% */
+        .bar-4 { height: 80%; background: var(--curve-late-majority); } /* 34% */
+        .bar-5 { height: 40%; background: var(--curve-laggard); } /* 16% */
+
+        .chasm-gap {
+            position: absolute;
+            left: 18%;
+            bottom: 0;
+            width: 4%;
+            height: 100%;
+            background: repeating-linear-gradient(
+                45deg,
+                #1f2937,
+                #1f2937 10px,
+                #374151 10px,
+                #374151 20px
+            );
+            z-index: -1;
+            opacity: 0.1;
+        }
+        .chasm-gap.active {
+            opacity: 1;
+            z-index: 10;
+        }
+
+        /* --- Icons --- */
+        .icon-box {
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 12px;
+            margin-bottom: 16px;
+        }
+        .icon-svg {
+            width: 32px;
+            height: 32px;
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        /* --- Section Specifics --- */
+        
+        /* Chasm Section */
+        .chasm-section {
+            background-color: var(--chasm-bg);
+            color: white;
+            border-bottom: none;
+        }
+        .chasm-section .card {
+            background: #1f2937;
+            color: white;
+            border: 1px solid #374151;
+        }
+        .warning-box {
+            border: 2px solid var(--danger);
+            background: rgba(239, 68, 68, 0.1);
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+
+        /* Stage Cards */
+        .stage-1 { border-color: var(--curve-innovator); }
+        .stage-1 .icon-box { background: rgba(239, 68, 68, 0.1); color: var(--curve-innovator); }
+        .stage-1 .badge { background: var(--curve-innovator); color: white; }
+
+        .stage-2 { border-color: var(--curve-early-adapter); }
+        .stage-2 .icon-box { background: rgba(249, 115, 22, 0.1); color: var(--curve-early-adapter); }
+        .stage-2 .badge { background: var(--curve-early-adapter); color: white; }
+
+        .stage-3 { border-color: var(--curve-early-majority); }
+        .stage-3 .icon-box { background: rgba(59, 130, 246, 0.1); color: var(--curve-early-majority); }
+        .stage-3 .badge { background: var(--curve-early-majority); color: white; }
+
+        .stage-4 { border-color: var(--curve-late-majority); }
+        .stage-4 .icon-box { background: rgba(99, 102, 241, 0.1); color: var(--curve-late-majority); }
+        .stage-4 .badge { background: var(--curve-late-majority); color: white; }
+
+        .stage-5 { border-color: var(--curve-laggard); }
+        .stage-5 .icon-box { background: rgba(148, 163, 184, 0.1); color: var(--curve-laggard); }
+        .stage-5 .badge { background: var(--curve-laggard); color: white; }
+
+        /* Accordion */
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+            padding: 0 10px;
+        }
+        .accordion-toggle {
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-top: 1px solid #eee;
+            margin-top: 15px;
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+        .accordion-toggle:hover { color: var(--primary); }
+        .accordion-toggle::after {
+            content: '+';
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+        .accordion-toggle.open::after { content: '-'; }
+
+        /* --- Footer --- */
+        footer {
+            background: var(--dark);
+            color: var(--gray);
+            padding: 40px 0;
+            text-align: center;
+            font-size: 0.8rem;
+        }
+
+        /* --- Animations --- */
+        .fade-in-up {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+        .fade-in-up.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Mobile Adjustments */
+        @media (max-width: 600px) {
+            h1 { font-size: 1.8rem; }
+            .chart-container { height: 150px; }
+            .curve-bar span { display: none; } /* Hide text inside bars on mobile */
+            .curve-bar::after {
+                content: attr(data-percent);
+                position: absolute;
+                bottom: -25px;
+                color: var(--gray);
+                font-size: 0.7rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Hero Section -->
+    <header class="hero">
+        <div class="container fade-in-up visible">
+            <span class="badge" style="background:var(--dark); color:white;">Innovation x AI</span>
+            <h1 class="mb-4">AIの波、<br>あなたはどこで乗る？</h1>
+            <p class="mb-8 text-lg" style="color: var(--gray);">
+                「イノベーション普及理論」で読み解く、<br>
+                AI時代のあなたの現在地と生存戦略。
+            </p>
+            <div class="chart-container">
+                <div class="curve-bar bar-1" data-percent="2.5%"><span>2.5%</span></div>
+                <div class="curve-bar bar-2" data-percent="13.5%"><span>13.5%</span></div>
+                <div class="chasm-gap" id="visual-chasm"></div>
+                <div class="curve-bar bar-3" data-percent="34%"><span>34%</span></div>
+                <div class="curve-bar bar-4" data-percent="34%"><span>34%</span></div>
+                <div class="curve-bar bar-5" data-percent="16%"><span>16%</span></div>
+            </div>
+            <p class="text-sm text-gray-500">スクロールして診断開始</p>
+            <div class="scroll-down">↓</div>
+        </div>
+    </header>
+
+    <!-- Section 1: Innovator & Early Adopter -->
+    <section id="early-phase">
+        <div class="container">
+            <h2 class="text-center mb-8">第一幕：実験と開拓</h2>
+            
+            <!-- Innovator -->
+            <div class="card stage-1 fade-in-up" id="card-innovator">
+                <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+                    <div>
+                        <span class="badge">① イノベーター (2.5%)</span>
+                        <h3>冒険者 / 実験マニア</h3>
+                    </div>
+                    <div class="icon-box">
+                        <!-- Lab Icon -->
+                        <svg class="icon-svg" viewBox="0 0 24 24"><path d="M10 2h4m-2 12l-6-6m14 6l-6-6m6 6v7a2 2 0 01-2 2H6a2 2 0 01-2-2v-7m12 0l-6-6-6 6M10 2v4m4-4v4" /></svg>
+                    </div>
+                </div>
+                <p class="mb-4">「仕事で使えるか？」よりも「面白いか？」が基準。ChatGPTが出た瞬間に課金し、エラーが出ても楽しむ人たち。</p>
+                <div class="accordion-toggle" onclick="toggleAccordion(this)">詳しく見る：AIでの行動パターン</div>
+                <div class="accordion-content">
+                    <ul style="margin-top:10px; font-size:0.9rem; color:#555;">
+                        <li>• APIやPythonコードを自作して自動化を試みる</li>
+                        <li>• 毎日新しいツールを触り、SNSで発信する</li>
+                        <li>• <strong>AIを「実験対象」として扱う</strong></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Early Adopter -->
+            <div class="card stage-2 fade-in-up" id="card-early-adapter">
+                <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+                    <div>
+                        <span class="badge">② アーリーアダプター (13.5%)</span>
+                        <h3>目利き / トレンドセッター</h3>
+                    </div>
+                    <div class="icon-box">
+                        <!-- Binoculars Icon -->
+                        <svg class="icon-svg" viewBox="0 0 24 24"><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path d="M2 12h3l2-2h10l2 2h3" /><path d="M19.07 4.93L17 7" /><path d="M4.93 4.93L7 7" /></svg>
+                    </div>
+                </div>
+                <p class="mb-4">イノベーターの情報を仕入れ、「自分の仕事や生活に役立つか」をシビアに判断する人たち。ここが実用化の最前線。</p>
+                <div class="accordion-toggle" onclick="toggleAccordion(this)">詳しく見る：AIでの行動パターン</div>
+                <div class="accordion-content">
+                    <ul style="margin-top:10px; font-size:0.9rem; color:#555;">
+                        <li>• 「とりあえず使ってみる」精神を持つ</li>
+                        <li>• 役立たないと判断すればすぐに解約する</li>
+                        <li>• 周囲に「これ便利だよ」と広める役割</li>
+                        <li>• <strong>実験を「現実の道具」に変える層</strong></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 2: THE CHASM -->
+    <section class="chasm-section" id="chasm-phase">
+        <div class="container text-center">
+            <div class="fade-in-up">
+                <div style="display:inline-flex; justify-content:center; align-items:center; background:#ef4444; width:60px; height:60px; border-radius:50%; margin-bottom:20px;">
+                    <svg class="icon-svg" style="color:white; width:36px; height:36px;" viewBox="0 0 24 24"><path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
+                </div>
+                <h2 class="mb-4" style="font-size:2rem;">THE CHASM (キャズム)</h2>
+                <p class="mb-8" style="font-size:1.2rem; color: #d1d5db;">ここに「深く大きな溝」があります。</p>
+            </div>
+
+            <div class="card text-left fade-in-up" style="border-left: 6px solid var(--danger);">
+                <h3 class="mb-2" style="color:var(--danger);">⚠️ 今、一番危険なゾーン</h3>
+                <p class="mb-4">「便利そうだけど、みんなが使い始めてからでいいや」<br>「正解が出てから勉強しよう」</p>
+                <div class="warning-box">
+                    <strong>なぜ危険なのか？</strong>
+                    <p class="mt-2 text-sm">
+                        AIの進化速度は速すぎます。あなたが「様子見」をしている間に、前提ルールが変わり、ツールが変わり、働き方が変わります。<br>
+                        AI時代において、<strong>「待ち」は「安全」ではなく「最大のリスク」</strong>になります。
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 3: Majority & Laggard -->
+    <section id="majority-phase">
+        <div class="container">
+            <h2 class="text-center mb-8">第二幕：常識への浸透</h2>
+
+            <!-- Early Majority -->
+            <div class="card stage-3 fade-in-up" id="card-early-majority">
+                <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+                    <div>
+                        <span class="badge">③ アーリーマジョリティ (34%)</span>
+                        <h3>実利主義者</h3>
+                    </div>
+                    <div class="icon-box">
+                        <!-- Briefcase Icon -->
+                        <svg class="icon-svg" viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2" ry="2" /><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16" /></svg>
+                    </div>
+                </div>
+                <p>会社が導入したり、マニュアルが整備されてから使い始める層。ここに来ると、その技術は「社会の当たり前」になり始めます。</p>
+            </div>
+
+            <!-- Late Majority -->
+            <div class="card stage-4 fade-in-up" id="card-late-majority">
+                <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+                    <div>
+                        <span class="badge">④ レイトマジョリティ (34%)</span>
+                        <h3>懐疑派 / フォロワー</h3>
+                    </div>
+                    <div class="icon-box">
+                        <!-- Shield Icon -->
+                        <svg class="icon-svg" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" /></svg>
+                    </div>
+                </div>
+                <p>できれば変化したくない層。業務上「仕方なく」使い始めます。変化にストレスを感じやすい傾向があります。</p>
+            </div>
+
+            <!-- Laggard -->
+            <div class="card stage-5 fade-in-up" id="card-laggard">
+                <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+                    <div>
+                        <span class="badge">⑤ ラガード (16%)</span>
+                        <h3>伝統守護者</h3>
+                    </div>
+                    <div class="icon-box">
+                        <!-- Lock Icon -->
+                        <svg class="icon-svg" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2" /><path d="M7 11V7a5 5 0 0110 0v4" /></svg>
+                    </div>
+                </div>
+                <p>最後までAIを使わない、あるいは拒否する層。環境に強制されて初めて最低限だけ触れます。</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Conclusion -->
+    <section style="background: white;">
+        <div class="container text-center fade-in-up">
+            <h2 class="mb-4 text-gradient">あなたの最適解は？</h2>
+            <p class="mb-8">イノベーターになる必要はありません。<br>しかし、「何も試さない人」になるのは危険です。</p>
+            
+            <div class="card" style="border: 2px solid var(--primary); background: #eef2ff;">
+                <h3>🎯 目指すべきポジション</h3>
+                <p class="text-lg font-bold my-4" style="color:var(--primary);">「ライトなアーリーアダプター」</p>
+                <ul class="text-left" style="display:inline-block; margin:0 auto; color:#4b5563;">
+                    <li class="mb-2">✅ 作れなくていい</li>
+                    <li class="mb-2">✅ 完璧に理解しなくていい</li>
+                    <li class="mb-2">✅ <strong>「小さく試して、合わなければやめる」</strong></li>
+                </ul>
+            </div>
+            
+            <p class="mt-8">
+                まずは無料のツールを1つ触ってみる。<br>
+                それだけで、あなたはキャズムを飛び越えています。
+            </p>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <p class="mb-2">企画・図解：何でも図解 ミエールくんv1</p>
+            <p style="opacity: 0.7;">
+                参考資料：<br>
+                Everett M. Rogers "Diffusion of Innovations"<br>
+                Geoffrey A. Moore "Crossing the Chasm"
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        // Interaction Logic
+        document.addEventListener('DOMContentLoaded', () => {
+            const observerOptions = {
+                root: null,
+                rootMargin: '0px',
+                threshold: 0.2
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                        
+                        // Highlight curve bars based on visible section
+                        if(entry.target.id === 'card-innovator') activateBar(0);
+                        if(entry.target.id === 'card-early-adapter') activateBar(1);
+                        if(entry.target.id === 'chasm-phase') activateChasm();
+                        if(entry.target.id === 'card-early-majority') activateBar(2);
+                        if(entry.target.id === 'card-late-majority') activateBar(3);
+                        if(entry.target.id === 'card-laggard') activateBar(4);
+                    }
+                });
+            }, observerOptions);
+
+            // Observe elements
+            document.querySelectorAll('.fade-in-up').forEach(el => observer.observe(el));
+            document.querySelectorAll('section').forEach(el => observer.observe(el));
+
+            function activateBar(index) {
+                const bars = document.querySelectorAll('.curve-bar');
+                const chasm = document.getElementById('visual-chasm');
+                
+                bars.forEach(b => {
+                    b.classList.remove('active');
+                    b.style.opacity = '0.3';
+                });
+                chasm.classList.remove('active');
+
+                if(bars[index]) {
+                    bars[index].classList.add('active');
+                    bars[index].style.opacity = '1';
+                }
+            }
+
+            function activateChasm() {
+                const bars = document.querySelectorAll('.curve-bar');
+                const chasm = document.getElementById('visual-chasm');
+                
+                bars.forEach(b => {
+                    b.classList.remove('active');
+                    b.style.opacity = '0.1'; // Dim everything else
+                });
+                chasm.classList.add('active');
+            }
+        });
+
+        function toggleAccordion(element) {
+            element.classList.toggle('open');
+            const content = element.nextElementSibling;
+            if (content.style.maxHeight) {
+                content.style.maxHeight = null;
+            } else {
+                content.style.maxHeight = content.scrollHeight + "px";
+            }
+        }
+    </script>
+</body>
+</html>
