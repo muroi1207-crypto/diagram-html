@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>5分で頭を空っぽにする！GTD超入門 | ミエールくん図解</title>
+    <meta name="description" content="仕事術GTD(Getting Things Done)の仕組みを直感的に理解できるインタラクティブ図解。">
+    <style>
+        /* --- 基本設定 --- */
+        :root {
+            --primary: #0EA5E9; /* Focus Blue */
+            --accent: #F97316; /* Action Orange */
+            --folder: #EAB308; /* Storage Yellow */
+            --trash: #EF4444; /* Delete Red */
+            --dark: #1F2937;
+            --light: #F3F4F6;
+            --white: #FFFFFF;
+            --font-main: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--font-main);
+            color: var(--dark);
+            background-color: var(--light);
+            line-height: 1.8;
+            overflow-x: hidden;
+        }
+
+        /* --- レイアウト --- */
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 20px;
+            background-color: var(--white);
+            box-shadow: 0 0 20px rgba(0,0,0,0.05);
+        }
+
+        section {
+            padding: 80px 0;
+            min-height: 80vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            border-bottom: 1px dashed #CBD5E1;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+
+        section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        h1, h2, h3 {
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        h1 { font-size: 2.5rem; color: var(--primary); line-height: 1.3; }
+        h2 { font-size: 1.8rem; margin-top: 0; }
+        h3 { font-size: 1.3rem; color: #6B7280; }
+
+        p {
+            margin-bottom: 1.5rem;
+            font-size: 1.1rem;
+            max-width: 600px;
+            text-align: justify;
+        }
+
+        /* --- SVGアイコン共通 --- */
+        .icon {
+            width: 120px;
+            height: 120px;
+            margin: 20px auto;
+            display: block;
+        }
+
+        .illustration-box {
+            background: var(--light);
+            padding: 30px;
+            border-radius: 20px;
+            margin: 30px 0;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        /* --- ヒーローセクション --- */
+        .hero {
+            text-align: center;
+            padding-top: 100px;
+            min-height: 100vh;
+            background: radial-gradient(circle at center, #E0F2FE 0%, #FFFFFF 70%);
+        }
+        .hero .subtitle {
+            font-size: 1.2rem;
+            color: #6B7280;
+            margin-bottom: 40px;
+        }
+        .scroll-hint {
+            margin-top: 50px;
+            animation: bounce 2s infinite;
+            color: var(--primary);
+            font-weight: bold;
+        }
+
+        /* --- 脳内メモリ比較 --- */
+        .brain-container {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+        .brain-box {
+            width: 280px;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            position: relative;
+        }
+        .brain-box.chaos {
+            background-color: #FEF2F2;
+            border: 2px solid #FCA5A5;
+        }
+        .brain-box.clear {
+            background-color: #F0F9FF;
+            border: 2px solid #7DD3FC;
+        }
+        .brain-icon {
+            font-size: 4rem;
+            margin-bottom: 10px;
+            display: block;
+        }
+        .thought-bubble {
+            position: absolute;
+            background: white;
+            padding: 5px 10px;
+            border-radius: 10px;
+            font-size: 0.8rem;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            opacity: 0;
+            animation: popIn 3s infinite;
+        }
+        
+        /* --- 5つのステップ --- */
+        .step-list {
+            list-style: none;
+            width: 100%;
+            max-width: 600px;
+        }
+        .step-item {
+            background: white;
+            border: 2px solid #E5E7EB;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            transition: transform 0.3s;
+        }
+        .step-item:hover {
+            transform: translateX(10px);
+            border-color: var(--primary);
+        }
+        .step-num {
+            background: var(--primary);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+            margin-right: 20px;
+            flex-shrink: 0;
+        }
+        .step-content h4 {
+            font-size: 1.1rem;
+            margin-bottom: 5px;
+            color: var(--dark);
+        }
+        .step-content p {
+            font-size: 0.9rem;
+            margin-bottom: 0;
+            color: #6B7280;
+        }
+
+        /* --- フローチャート体験 --- */
+        .flow-game {
+            background: var(--dark);
+            color: white;
+            padding: 30px;
+            border-radius: 20px;
+            width: 100%;
+            max-width: 600px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .task-card {
+            background: white;
+            color: var(--dark);
+            padding: 20px;
+            border-radius: 10px;
+            font-weight: bold;
+            font-size: 1.2rem;
+            margin: 20px auto;
+            width: 80%;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+            animation: slideDown 0.5s ease-out;
+        }
+        .question-box {
+            font-size: 1.1rem;
+            margin: 20px 0;
+            min-height: 3em;
+        }
+        .btn-group {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+        .btn-flow {
+            padding: 10px 30px;
+            border: none;
+            border-radius: 50px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.1s;
+        }
+        .btn-yes { background: var(--primary); color: white; }
+        .btn-no { background: #4B5563; color: white; }
+        .btn-flow:active { transform: scale(0.95); }
+        
+        .result-badge {
+            display: inline-block;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: bold;
+            margin-top: 15px;
+            animation: popIn 0.5s;
+        }
+
+        /* --- アコーディオン --- */
+        .accordion { width: 100%; margin-top: 20px; }
+        .acc-item { border: 1px solid #E5E7EB; border-radius: 8px; margin-bottom: 10px; overflow: hidden; }
+        .acc-header { background: #F9FAFB; padding: 15px 20px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; font-weight: bold; }
+        .acc-header::after { content: "+"; font-size: 1.5rem; color: var(--primary); }
+        .acc-item.active .acc-header::after { content: "-"; }
+        .acc-content { max-height: 0; overflow: hidden; transition: max-height 0.3s ease-out; padding: 0 20px; background: white; }
+        .acc-item.active .acc-content { padding: 20px; max-height: 300px; }
+
+        /* --- フッター --- */
+        footer { padding: 40px 20px; text-align: center; background: var(--dark); color: #9CA3AF; font-size: 0.9rem; }
+        footer a { color: var(--white); text-decoration: none; }
+
+        /* --- アニメーション定義 --- */
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {transform: translateY(0);}
+            40% {transform: translateY(-10px);}
+            60% {transform: translateY(-5px);}
+        }
+        @keyframes popIn {
+            0% { transform: scale(0); opacity: 0; }
+            80% { transform: scale(1.1); opacity: 1; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        @keyframes slideDown {
+            from { transform: translateY(-20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        /* レスポンシブ */
+        @media (max-width: 600px) {
+            h1 { font-size: 2rem; }
+            section { padding: 60px 0; }
+            .btn-group { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- 1. 導入：頭のメモリ不足 -->
+        <section class="hero visible">
+            <svg class="icon" viewBox="0 0 100 100">
+                <path d="M20 50 Q30 20 50 20 Q70 20 80 50 Q90 80 50 80 Q10 80 20 50 Z" fill="none" stroke="#0EA5E9" stroke-width="4"/>
+                <path d="M35 45 Q40 40 45 45" fill="none" stroke="#0EA5E9" stroke-width="3" stroke-linecap="round"/>
+                <path d="M55 45 Q60 40 65 45" fill="none" stroke="#0EA5E9" stroke-width="3" stroke-linecap="round"/>
+                <circle cx="50" cy="20" r="5" fill="#F97316">
+                    <animate attributeName="opacity" values="1;0;1" dur="1s" repeatCount="indefinite" />
+                </circle>
+            </svg>
+            <h1>GTD 超入門</h1>
+            <p class="subtitle">Getting Things Done<br>「やることを管理」するのではなく<br>「頭を空っぽにする」技術。</p>
+            <div class="scroll-hint">SCROLL DOWN ▼</div>
+        </section>
+
+        <!-- 2. 問題提起：なぜ疲れるのか -->
+        <section>
+            <h2>脳は「覚える」のが苦手</h2>
+            <p>「あれもやらなきゃ」「メール返信しなきゃ」...<br>頭の中でタスクを管理しようとすると、脳のメモリはすぐに一杯になります。</p>
+            
+            <div class="brain-container">
+                <div class="brain-box chaos">
+                    <span class="brain-icon">🤯</span>
+                    <h3>いつもの状態</h3>
+                    <p style="font-size:0.9rem; text-align:center;">常に何かに追われている。<br>集中できない。</p>
+                    <div class="thought-bubble" style="top:10px; left:10px;">メール...</div>
+                    <div class="thought-bubble" style="top:50px; right:10px; animation-delay:1s;">会議資料...</div>
+                    <div class="thought-bubble" style="bottom:20px; left:20px; animation-delay:2s;">洗剤買う...</div>
+                </div>
+                <div class="brain-box clear">
+                    <span class="brain-icon">😌</span>
+                    <h3>GTDの状態</h3>
+                    <p style="font-size:0.9rem; text-align:center;">頭の中は空っぽ。<br>今やるべきことだけに集中。</p>
+                </div>
+            </div>
+            <p style="margin-top:30px;">GTDのゴールは<strong>「Mind Like Water（水のような澄んだ心）」</strong>になることです。</p>
+        </section>
+
+        <!-- 3. 解決策：5つのステップ -->
+        <section>
+            <h2>頭を空にする「5つのステップ」</h2>
+            <p>この手順通りに動かせば、脳のメモリを使わずに済みます。</p>
+
+            <ul class="step-list">
+                <li class="step-item">
+                    <div class="step-num">1</div>
+                    <div class="step-content">
+                        <h4>把握 (Capture)</h4>
+                        <p>頭の中の「気になること」をすべて書き出し、Inbox（箱）に入れる。</p>
+                    </div>
+                </li>
+                <li class="step-item">
+                    <div class="step-num">2</div>
+                    <div class="step-content">
+                        <h4>見極め (Clarify)</h4>
+                        <p>Inboxから1つ取り出し、「行動が必要か？」を判断する。</p>
+                    </div>
+                </li>
+                <li class="step-item">
+                    <div class="step-num">3</div>
+                    <div class="step-content">
+                        <h4>整理 (Organize)</h4>
+                        <p>「カレンダー」「連絡待ち」「次のアクション」など適切な場所に分ける。</p>
+                    </div>
+                </li>
+                <li class="step-item">
+                    <div class="step-num">4</div>
+                    <div class="step-content">
+                        <h4>更新 (Reflect)</h4>
+                        <p>週に1回、システム全体を見直してメンテナンスする。</p>
+                    </div>
+                </li>
+                <li class="step-item">
+                    <div class="step-num">5</div>
+                    <div class="step-content">
+                        <h4>実行 (Engage)</h4>
+                        <p>今の状況でできる最適なタスクを選んで実行する。</p>
+                    </div>
+                </li>
+            </ul>
+        </section>
+
+        <!-- 4. 体験：仕分けフローチャート -->
+        <section>
+            <h2>体験：「見極め」の魔法</h2>
+            <p>GTDの心臓部である「仕分け」を体験してみましょう。<br>タスクが表示されるので、質問に答えてください。</p>
+
+            <div class="flow-game" id="game-area">
+                <div style="font-size:0.9rem; color:#9CA3AF; margin-bottom:10px;">Inboxにあるタスク</div>
+                <div class="task-card" id="current-task">「部長にメールで会議日程を送る」</div>
+                
+                <div class="question-box" id="question-text">
+                    これは行動を起こす必要がある？
+                </div>
+
+                <div class="btn-group" id="btn-group">
+                    <button class="btn-flow btn-yes" onclick="answer('yes')">YES</button>
+                    <button class="btn-flow btn-no" onclick="answer('no')">NO</button>
+                </div>
+
+                <div id="result-area" style="display:none;">
+                    <div class="result-badge" id="result-badge" style="background:#fff; color:#333;"></div>
+                    <p id="result-desc" style="font-size:0.9rem; margin-top:10px;"></p>
+                    <button class="btn-flow" style="background:#6B7280; margin-top:10px;" onclick="resetGame()">次のタスクへ</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- 5. まとめとFAQ -->
+        <section>
+            <h2>GTDを始めるコツ</h2>
+            <p>完璧を目指す必要はありません。まずは「書き出す」ことから始めましょう。</p>
+
+            <div class="accordion">
+                <div class="acc-item">
+                    <div class="acc-header" onclick="toggleAcc(this)">⏰ 2分ルールとは？</div>
+                    <div class="acc-content">
+                        <p>「見極め」の段階で、<strong>2分以内に終わることなら、リストに書かずにその場でやってしまう</strong>というルールです。これがタスクを溜め込まない最大の秘訣です。</p>
+                    </div>
+                </div>
+                <div class="acc-item">
+                    <div class="acc-header" onclick="toggleAcc(this)">📅 カレンダーとToDoの違い</div>
+                    <div class="acc-content">
+                        <p><strong>カレンダー:</strong> 「○月○日 10時」のように、その日その瞬間にしかできないこと（聖域）。<br>
+                        <strong>ToDoリスト:</strong> 時間は決まっていないが、「できるだけ早くやる」こと。</p>
+                    </div>
+                </div>
+                <div class="acc-item">
+                    <div class="acc-header" onclick="toggleAcc(this)">🔄 週次レビューの重要性</div>
+                    <div class="acc-content">
+                        <p>週に一度、頭の中を空っぽにし、リストを整理する時間です。これを行わないと、システムへの信頼がなくなり、また脳で覚えようとしてしまいます。</p>
+                    </div>
+                </div>
+            </div>
+            
+            <h3 style="margin-top:40px; color:var(--primary);">結論</h3>
+            <p>GTDは仕事を増やすためではなく<br><strong>「今、目の前のことに没頭する自由」</strong><br>を手に入れるための技術です。</p>
+        </section>
+
+        <!-- フッター -->
+        <footer>
+            <p>図解作成：テクニカル・ストーリーテラー「ミエールくんv1」</p>
+            <p style="margin-top:10px; font-size:0.8rem;">
+                参考概念: David Allen "Getting Things Done"
+            </p>
+        </footer>
+    </div>
+
+    <script>
+        // --- スクロールアニメーション ---
+        const observerOptions = { threshold: 0.2 };
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+        document.querySelectorAll('section').forEach(section => { observer.observe(section); });
+
+        // --- アコーディオン制御 ---
+        function toggleAcc(header) {
+            const item = header.parentElement;
+            item.classList.toggle('active');
+        }
+
+        // --- 仕分けゲームロジック ---
+        const tasks = [
+            { text: "部長にメールで会議日程を送る", type: "simple" }, // 2分以内
+            { text: "来月のイベント企画書を作る", type: "project" }, // 複雑
+            { text: "壊れた傘を捨てる", type: "trash" }, // 行動不要
+            { text: "参考になりそうな記事を読む", type: "someday" } // いつか
+        ];
+        
+        let currentTaskIndex = 0;
+        let step = 0; // 0:行動必要? 1:複雑? 2:2分以内?
+
+        function resetGame() {
+            currentTaskIndex = (currentTaskIndex + 1) % tasks.length;
+            const task = tasks[currentTaskIndex];
+            
+            document.getElementById('current-task').innerText = task.text;
+            document.getElementById('result-area').style.display = 'none';
+            document.getElementById('btn-group').style.display = 'flex';
+            
+            // ステップリセット
+            step = 0;
+            askQuestion("これは行動を起こす必要がある？");
+        }
+
+        function askQuestion(text) {
+            document.getElementById('question-text').innerText = text;
+        }
+
+        function showResult(title, desc, color) {
+            document.getElementById('btn-group').style.display = 'none';
+            const resArea = document.getElementById('result-area');
+            const badge = document.getElementById('result-badge');
+            const descP = document.getElementById('result-desc');
+            
+            resArea.style.display = 'block';
+            badge.innerText = title;
+            badge.style.backgroundColor = color;
+            badge.style.color = '#FFF';
+            descP.innerText = desc;
+        }
+
+        function answer(ans) {
+            const task = tasks[currentTaskIndex];
+
+            if (step === 0) { // Q1: 行動必要？
+                if (ans === 'yes') {
+                    step = 1;
+                    askQuestion("それは一度のアクションで終わる？（複雑じゃない？）");
+                } else {
+                    // 行動不要
+                    if (task.type === 'trash') showResult("ゴミ箱行き", "不要なので捨てましょう。", "#EF4444");
+                    else showResult("いつかやる / 資料", "今は行動しません。保留リストか資料フォルダへ。", "#EAB308");
+                }
+            } else if (step === 1) { // Q2: 複雑じゃない？
+                if (ans === 'yes') {
+                    step = 2;
+                    askQuestion("それは2分以内にできる？");
+                } else {
+                    showResult("プロジェクト化", "複数の手順が必要です。「プロジェクトリスト」に登録し、最初の一歩を決めましょう。", "#0EA5E9");
+                }
+            } else if (step === 2) { // Q3: 2分以内？
+                if (ans === 'yes') {
+                    showResult("今すぐやる！", "2分以内ならリストには書きません。今すぐ片付けましょう。", "#F97316");
+                } else {
+                    showResult("「次にやる」リストへ", "2分以上かかります。いつやるか決めるか、誰かに任せましょう。", "#0EA5E9");
+                }
+            }
+        }
+    </script>
+</body>
+</html>
