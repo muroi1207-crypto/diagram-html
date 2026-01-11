@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI活用思想とGTDの接続 | 何でも図解ミエールくん</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;500;700;900&family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Noto Sans JP"', 'sans-serif'],
+                        serif: ['"Shippori Mincho"', 'serif'],
+                    },
+                    colors: {
+                        bg: '#111827', // Gray 900
+                        card: '#1f2937', // Gray 800
+                        human: '#10b981', // Emerald 500 (GTD/Human)
+                        ai: '#a855f7', // Purple 500 (AI/Process)
+                        text: '#f3f4f6', // Gray 100
+                        muted: '#9ca3af', // Gray 400
+                    },
+                    animation: {
+                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'float': 'float 6s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-15px)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #111827; }
+        ::-webkit-scrollbar-thumb { background: #374151; border-radius: 4px; }
+        
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .reveal-left {
+            opacity: 0;
+            transform: translateX(-50px);
+            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .reveal-right {
+            opacity: 0;
+            transform: translateX(50px);
+            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .reveal-left.active, .reveal-right.active {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        /* Connecting Line Animation */
+        .connector-line {
+            height: 0;
+            transition: height 1.5s ease-out;
+        }
+        .connector-line.active {
+            height: 100px;
+        }
+
+        .glass-panel {
+            background: rgba(31, 41, 55, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+    </style>
+</head>
+<body class="bg-bg text-text font-sans antialiased selection:bg-human selection:text-bg">
+
+    <!-- Progress Bar -->
+    <div class="fixed top-0 left-0 h-1 z-50 transition-all duration-300 bg-gradient-to-r from-human via-white to-ai" id="progressBar" style="width: 0%"></div>
+
+    <!-- Hero Section -->
+    <header class="min-h-screen flex flex-col justify-center items-center text-center px-4 relative overflow-hidden">
+        <!-- Background Auras -->
+        <div class="absolute top-1/4 left-1/4 w-64 h-64 bg-human/10 rounded-full blur-[100px] animate-pulse-slow"></div>
+        <div class="absolute bottom-1/4 right-1/4 w-64 h-64 bg-ai/10 rounded-full blur-[100px] animate-pulse-slow" style="animation-delay: 2s;"></div>
+
+        <div class="z-10 mb-8 animate-float">
+            <div class="flex items-center gap-4 text-4xl md:text-6xl">
+                <i data-lucide="brain-circuit" class="text-human"></i>
+                <span class="text-muted text-2xl">×</span>
+                <i data-lucide="cpu" class="text-ai"></i>
+            </div>
+        </div>
+
+        <h1 class="text-3xl md:text-5xl font-serif font-bold mb-6 leading-relaxed tracking-wider">
+            思考は<span class="text-human">GTD</span>で整え、<br>
+            実装は<span class="text-ai">AI</span>で加速する。
+        </h1>
+
+        <p class="text-muted max-w-2xl mx-auto mb-12 leading-loose">
+            人が考え、AIに預ける。<br>
+            「判断」をAIに渡さず、「処理」を迷わず預けるための<br>
+            現代の知的生産思想。
+        </p>
+
+        <div class="animate-bounce mt-8">
+            <i data-lucide="chevron-down" class="w-6 h-6 mx-auto text-muted"></i>
+        </div>
+    </header>
+
+    <main class="max-w-4xl mx-auto px-6 pb-32">
+
+        <!-- Section 1: The Core Philosophy -->
+        <section class="reveal mb-32 text-center">
+            <h2 class="text-xl md:text-2xl font-serif text-white mb-12 border-b border-white/10 pb-4 inline-block">
+                01. 思想の前提
+            </h2>
+
+            <div class="glass-panel p-8 rounded-2xl relative overflow-hidden">
+                <div class="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-human to-ai"></div>
+                
+                <p class="text-xl font-bold mb-6">目的はひとつ。</p>
+                <p class="text-2xl md:text-3xl font-serif text-white leading-normal mb-8">
+                    「人の頭を、<br>
+                    <span class="bg-clip-text text-transparent bg-gradient-to-r from-human to-ai">考えること</span>に集中させる」
+                </p>
+                
+                <p class="text-muted text-sm leading-relaxed text-left md:text-center">
+                    GTDは「記憶」と「未完了」を追い出し、<br class="hidden md:block">
+                    AIは「処理」と「形式化」を肩代わりする。<br>
+                    どちらか一方では不十分。両輪が揃って初めて、真の思考の自由が生まれます。
+                </p>
+            </div>
+        </section>
+
+        <!-- Section 2: Division of Labor (Left vs Right) -->
+        <section class="mb-32">
+            <div class="text-center mb-12 reveal">
+                <h2 class="text-xl md:text-2xl font-serif text-white border-b border-white/10 pb-4 inline-block">
+                    02. 役割の完全分業
+                </h2>
+                <p class="text-muted mt-4">AI活用をノイズにしないための絶対ルール</p>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-8">
+                <!-- Human Side -->
+                <div class="reveal-left bg-card/50 border border-human/20 p-8 rounded-2xl relative group hover:bg-card/80 transition-colors">
+                    <div class="absolute -top-6 left-1/2 -translate-x-1/2 bg-bg p-2 rounded-full border border-human/30">
+                        <i data-lucide="user" class="w-8 h-8 text-human"></i>
+                    </div>
+                    <h3 class="text-human text-xl font-bold text-center mt-4 mb-6 tracking-widest">人間 (GTD)</h3>
+                    
+                    <ul class="space-y-4">
+                        <li class="flex items-start gap-3">
+                            <i data-lucide="check-circle-2" class="w-5 h-5 text-human shrink-0 mt-1"></i>
+                            <div>
+                                <span class="text-white font-bold block">目的を決める</span>
+                                <span class="text-xs text-muted">Whyを定義するのは人間の特権</span>
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <i data-lucide="check-circle-2" class="w-5 h-5 text-human shrink-0 mt-1"></i>
+                            <div>
+                                <span class="text-white font-bold block">何をやるか選ぶ</span>
+                                <span class="text-xs text-muted">優先順位の最終決定</span>
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <i data-lucide="check-circle-2" class="w-5 h-5 text-human shrink-0 mt-1"></i>
+                            <div>
+                                <span class="text-white font-bold block">やらないことを決める</span>
+                                <span class="text-xs text-muted">ノイズを遮断する意思</span>
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <i data-lucide="check-circle-2" class="w-5 h-5 text-human shrink-0 mt-1"></i>
+                            <div>
+                                <span class="text-white font-bold block">最終判断を下す</span>
+                                <span class="text-xs text-muted">責任を取る</span>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- AI Side -->
+                <div class="reveal-right bg-card/50 border border-ai/20 p-8 rounded-2xl relative group hover:bg-card/80 transition-colors">
+                    <div class="absolute -top-6 left-1/2 -translate-x-1/2 bg-bg p-2 rounded-full border border-ai/30">
+                        <i data-lucide="bot" class="w-8 h-8 text-ai"></i>
+                    </div>
+                    <h3 class="text-ai text-xl font-bold text-center mt-4 mb-6 tracking-widest">システム (AI)</h3>
+
+                    <ul class="space-y-4">
+                        <li class="flex items-start gap-3">
+                            <i data-lucide="zap" class="w-5 h-5 text-ai shrink-0 mt-1"></i>
+                            <div>
+                                <span class="text-white font-bold block">整理・分解する</span>
+                                <span class="text-xs text-muted">カオスを構造化する</span>
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <i data-lucide="zap" class="w-5 h-5 text-ai shrink-0 mt-1"></i>
+                            <div>
+                                <span class="text-white font-bold block">言葉にする</span>
+                                <span class="text-xs text-muted">曖昧な思考の言語化</span>
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <i data-lucide="zap" class="w-5 h-5 text-ai shrink-0 mt-1"></i>
+                            <div>
+                                <span class="text-white font-bold block">叩き台を作る</span>
+                                <span class="text-xs text-muted">0から1への跳躍補助</span>
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <i data-lucide="zap" class="w-5 h-5 text-ai shrink-0 mt-1"></i>
+                            <div>
+                                <span class="text-white font-bold block">見落としを減らす</span>
+                                <span class="text-xs text-muted">網羅的な視点の提供</span>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Central Axiom -->
+            <div class="mt-12 text-center reveal">
+                <div class="inline-block p-4 border-y border-white/10">
+                    <p class="text-lg md:text-xl font-serif">
+                        <span class="text-human font-bold">判断</span>はAIに渡さない。<br>
+                        <span class="text-ai font-bold">処理</span>は迷わず預ける。
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 3: The Flow -->
+        <section class="reveal mb-32">
+            <h2 class="text-xl md:text-2xl font-serif text-white text-center mb-12 border-b border-white/10 pb-4 inline-block">
+                03. 統合されたワークフロー
+            </h2>
+
+            <div class="flex flex-col items-center">
+                <!-- Step 1: Human -->
+                <div class="w-full md:w-2/3 bg-human/10 border-l-4 border-human p-6 rounded-r-lg relative">
+                    <div class="absolute -left-3 top-1/2 -translate-y-1/2 bg-human rounded-full p-1">
+                        <i data-lucide="brain" class="w-4 h-4 text-bg"></i>
+                    </div>
+                    <h4 class="text-human font-bold mb-2">1. 思考の整理 (GTD)</h4>
+                    <p class="text-sm text-muted">「気になること」を全て出し、次にやるべきことを明確にする。ここで「何をAIに頼むか」の判断も行われる。</p>
+                </div>
+
+                <!-- Connector -->
+                <div class="connector-line w-0.5 bg-gradient-to-b from-human to-ai my-0"></div>
+
+                <!-- Step 2: AI -->
+                <div class="w-full md:w-2/3 bg-ai/10 border-l-4 border-ai p-6 rounded-r-lg relative">
+                    <div class="absolute -left-3 top-1/2 -translate-y-1/2 bg-ai rounded-full p-1">
+                        <i data-lucide="cpu" class="w-4 h-4 text-bg"></i>
+                    </div>
+                    <h4 class="text-ai font-bold mb-2">2. 実装の加速 (AI)</h4>
+                    <p class="text-sm text-muted">明確になったタスクを実行に移す。要約、コード生成、プランニング案出し。圧倒的な速度で「形」にする。</p>
+                </div>
+
+                <!-- Connector -->
+                <div class="connector-line w-0.5 bg-gradient-to-b from-ai to-human my-0"></div>
+
+                <!-- Step 3: Human -->
+                <div class="w-full md:w-2/3 bg-human/10 border-l-4 border-human p-6 rounded-r-lg relative">
+                    <div class="absolute -left-3 top-1/2 -translate-y-1/2 bg-human rounded-full p-1">
+                        <i data-lucide="gavel" class="w-4 h-4 text-bg"></i>
+                    </div>
+                    <h4 class="text-human font-bold mb-2">3. 最終判断 (Human)</h4>
+                    <p class="text-sm text-muted">AIが出したアウトプットを評価し、採用するか、修正するか、捨てるかを決める。責任は人間が持つ。</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 4: Anti-Pattern -->
+        <section class="reveal mb-32">
+            <div class="bg-red-900/20 border border-red-500/30 p-8 rounded-2xl text-center">
+                <div class="flex justify-center mb-4">
+                    <i data-lucide="alert-triangle" class="w-10 h-10 text-red-400"></i>
+                </div>
+                <h3 class="text-xl font-bold text-red-200 mb-4">やらないこと</h3>
+                <p class="text-red-100/70 mb-6">
+                    「AIへの丸投げ」「思考停止の自動化」「目的不在の効率化」
+                </p>
+                <p class="text-sm text-muted">
+                    速さより正しさ、量より意味。<br>
+                    考えることから逃げるためにAIを使ってはならない。
+                </p>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="text-center py-12 border-t border-white/10">
+            <p class="text-2xl font-serif text-white mb-6">
+                思考と判断は<span class="text-human">人</span>が持ち、<br>
+                記憶と処理はすべて<span class="text-ai">仕組み</span>に預ける。
+            </p>
+            <p class="text-muted text-sm">
+                これが、AI時代のGTD。<br>
+                <span class="text-xs opacity-50 mt-4 block">Based on your philosophy | Designed by ミエールくんv1</span>
+            </p>
+        </footer>
+
+    </main>
+
+    <script>
+        // Icon initialization
+        lucide.createIcons();
+
+        // Reveal Animation Logic
+        const revealElements = document.querySelectorAll('.reveal, .reveal-left, .reveal-right');
+        const connectors = document.querySelectorAll('.connector-line');
+        const progressBar = document.getElementById('progressBar');
+
+        function checkReveal() {
+            const triggerBottom = window.innerHeight * 0.85;
+
+            revealElements.forEach(element => {
+                const elementTop = element.getBoundingClientRect().top;
+                if (elementTop < triggerBottom) {
+                    element.classList.add('active');
+                }
+            });
+
+            connectors.forEach(line => {
+                const lineTop = line.getBoundingClientRect().top;
+                if (lineTop < triggerBottom) {
+                    line.classList.add('active');
+                }
+            });
+        }
+
+        // Scroll Event
+        window.addEventListener('scroll', () => {
+            checkReveal();
+            
+            // Progress Bar Logic
+            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            progressBar.style.width = scrolled + "%";
+        });
+
+        // Init
+        checkReveal();
+    </script>
+</body>
+</html>
