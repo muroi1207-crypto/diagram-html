@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>私の理念｜AI時代に、何に命を懸けるか</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #000000;
+            --text-color: #e5e5e5;
+            --accent-color: #e11d48; /* Crimson Red */
+            --accent-glow: rgba(225, 29, 72, 0.5);
+            --sub-text: #a3a3a3;
+            --card-bg: #171717;
+            --line-color: #333;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: 'Noto Sans JP', sans-serif;
+            line-height: 1.8;
+            overflow-x: hidden;
+        }
+
+        /* Utility */
+        .container {
+            max-width: 680px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        .highlight {
+            color: var(--accent-color);
+            font-weight: 900;
+            text-shadow: 0 0 15px var(--accent-glow);
+        }
+
+        .text-center { text-align: center; }
+        .mb-4 { margin-bottom: 2rem; }
+
+        /* Animation Classes */
+        .fade-up {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .fade-up.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Header */
+        header {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: relative;
+        }
+
+        h1 {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 900;
+            line-height: 1.2;
+            letter-spacing: -0.05em;
+            margin-bottom: 1.5rem;
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            color: var(--sub-text);
+            max-width: 500px;
+        }
+
+        .pulse-circle {
+            width: 20px;
+            height: 20px;
+            background: var(--accent-color);
+            border-radius: 50%;
+            margin-bottom: 30px;
+            box-shadow: 0 0 0 0 rgba(225, 29, 72, 0.7);
+            animation: pulse-red 2s infinite;
+        }
+
+        @keyframes pulse-red {
+            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(225, 29, 72, 0.7); }
+            70% { transform: scale(1); box-shadow: 0 0 0 20px rgba(225, 29, 72, 0); }
+            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(225, 29, 72, 0); }
+        }
+
+        /* Section Styling */
+        section {
+            padding: 100px 0;
+            border-left: 1px solid var(--line-color);
+            margin-left: 20px;
+            padding-left: 40px;
+            position: relative;
+        }
+
+        section::before {
+            content: '';
+            position: absolute;
+            left: -5px;
+            top: 100px;
+            width: 9px;
+            height: 9px;
+            background: var(--text-color);
+            border-radius: 50%;
+        }
+
+        section.accent-marker::before {
+            background: var(--accent-color);
+            box-shadow: 0 0 10px var(--accent-color);
+        }
+
+        h2 {
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+        }
+
+        .concept-card {
+            background: var(--card-bg);
+            border: 1px solid #333;
+            padding: 30px;
+            border-radius: 4px;
+            margin: 30px 0;
+        }
+
+        /* Icon SVG */
+        .icon-box {
+            width: 60px;
+            height: 60px;
+            margin-bottom: 20px;
+        }
+        .icon-svg {
+            width: 100%;
+            height: 100%;
+            stroke: var(--text-color);
+            fill: none;
+            stroke-width: 1.5;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        /* Phase 2: Negative Space */
+        .negative-list li {
+            list-style: none;
+            margin-bottom: 10px;
+            color: var(--sub-text);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .negative-list li::before {
+            content: '×';
+            color: #666;
+            font-weight: bold;
+        }
+
+        /* Phase 4: AI Excuse Destroyer */
+        .excuse-container {
+            background: #000;
+            border: 1px solid #333;
+            padding: 20px;
+            font-family: monospace;
+            color: #666;
+        }
+        
+        .excuse-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            transition: all 1s;
+        }
+
+        .excuse-item.erased {
+            text-decoration: line-through;
+            opacity: 0.3;
+            color: var(--accent-color);
+        }
+
+        /* Phase 5: Heartbeat */
+        .heartbeat-line {
+            width: 100%;
+            height: 100px;
+            stroke: var(--accent-color);
+            stroke-width: 2;
+            fill: none;
+        }
+        
+        .heartbeat-path {
+            stroke-dasharray: 1000;
+            stroke-dashoffset: 1000;
+            animation: drawHeartbeat 4s linear infinite;
+        }
+
+        @keyframes drawHeartbeat {
+            0% { stroke-dashoffset: 1000; }
+            100% { stroke-dashoffset: 0; }
+        }
+
+        /* Footer */
+        .footer-message {
+            font-size: 1.5rem;
+            font-weight: 700;
+            text-align: center;
+            padding: 100px 0;
+            border-top: 1px solid var(--line-color);
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            h1 { font-size: 2.2rem; }
+            h2 { font-size: 1.6rem; }
+            section { padding: 60px 0; padding-left: 20px; margin-left: 10px; }
+            .container { padding: 0 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="container">
+        <div class="pulse-circle"></div>
+        <h1>AI時代に、<br>何に<span class="highlight">命</span>を懸けるか</h1>
+        <p class="subtitle">生存のためではない。価値を生み出す「遊び」のために。</p>
+        
+        <div style="position: absolute; bottom: 40px; opacity: 0.5;">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M7 13L12 18L17 13M7 6L12 11L17 6" />
+            </svg>
+        </div>
+    </header>
+
+    <div class="container">
+
+        <!-- Phase 1: Paradigm Shift -->
+        <section class="fade-up">
+            <div class="icon-box">
+                <svg viewBox="0 0 24 24" class="icon-svg">
+                    <rect x="2" y="6" width="20" height="12" rx="2"></rect>
+                    <path d="M6 12h4m-2-2v4"></path>
+                    <circle cx="16" cy="12" r="2"></circle>
+                </svg>
+            </div>
+            <h2>01. 仕事は「ゲーム」になった</h2>
+            <p>現代において、仕事はもはや「生きるための手段」ではありません。<br>なくても生きていける時代に私たちが働く理由。</p>
+            <div class="concept-card">
+                <p style="font-size: 1.2rem; font-weight: bold;">それは、価値を生み出す<span class="highlight">「真剣な遊び」</span>です。</p>
+            </div>
+        </section>
+
+        <!-- Phase 2: The Pain -->
+        <section class="fade-up">
+            <div class="icon-box">
+                <svg viewBox="0 0 24 24" class="icon-svg" style="stroke: #666;">
+                    <path d="M10 2h4m-2 18v-2M4 6h16M4 6l2 14h12l2-14"></path>
+                </svg>
+            </div>
+            <h2>02. 没頭なき時間の代償</h2>
+            <p>「波風を立てず、そこそこに」<br>一見賢いその生き方が、実は最も危険です。本気で没頭しない空白の時間は、ネガティブの温床となります。</p>
+            <div class="concept-card" style="border-color: #333; background: #0a0a0a;">
+                <ul class="negative-list">
+                    <li>終わらない執着</li>
+                    <li>他者への嫉妬</li>
+                    <li>漠然とした将来への不安</li>
+                </ul>
+                <p style="margin-top: 15px; font-size: 0.9rem; color: #888;">これらは全て「ヒマ」が生み出す毒です。</p>
+            </div>
+        </section>
+
+        <!-- Phase 3: Independence -->
+        <section class="fade-up accent-marker">
+            <div class="icon-box">
+                <svg viewBox="0 0 24 24" class="icon-svg" style="stroke: var(--accent-color);">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"></polygon>
+                </svg>
+            </div>
+            <h2>03. 独立して得た「静寂」</h2>
+            <p>逃げ場をなくし、全ての判断を自分で引き取った時、初めて人生は自分のものになります。</p>
+            <p class="mt-4">安定が人をダメにするのではありません。<br><span class="highlight">「判断を他人に預け続けること」</span>が、人の感覚を鈍らせるのです。</p>
+        </section>
+
+        <!-- Phase 4: The Role of AI -->
+        <section class="fade-up">
+            <div class="icon-box">
+                <svg viewBox="0 0 24 24" class="icon-svg">
+                    <rect x="4" y="2" width="16" height="20" rx="2"></rect>
+                    <line x1="12" y1="18" x2="12" y2="18.01"></line>
+                </svg>
+            </div>
+            <h2>04. AIは「言い訳」を奪う</h2>
+            <p>AIは私たちの仕事を奪うのではありません。<br>「できない理由」を奪うのです。</p>
+            
+            <div class="concept-card">
+                <div class="excuse-container" id="excuse-list">
+                    <div class="excuse-item"><span>> 時間がない</span> <span class="status">Processing...</span></div>
+                    <div class="excuse-item"><span>> スキルがない</span> <span class="status">Processing...</span></div>
+                    <div class="excuse-item"><span>> 人手が足りない</span> <span class="status">Processing...</span></div>
+                </div>
+                <p style="margin-top: 20px; text-align: center;">雑用はAIがやる。残る問いはひとつだけ。</p>
+                <p style="font-size: 1.4rem; font-weight: 900; text-align: center; margin-top: 10px; color: var(--accent-color);">「あなたは、何に命を懸けるのか？」</p>
+            </div>
+        </section>
+
+        <!-- Phase 5: The Mission -->
+        <section class="fade-up accent-marker">
+            <div class="icon-box">
+                <svg viewBox="0 0 24 24" class="icon-svg" style="stroke: var(--accent-color);">
+                    <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
+                </svg>
+            </div>
+            <h2>05. 心が震える瞬間を</h2>
+            <p>私が仕事をする理由は、売上や効率の最大化ではありません。</p>
+            <div style="margin: 40px 0;">
+                <svg class="heartbeat-line" viewBox="0 0 300 100">
+                    <path class="heartbeat-path" d="M0,50 L30,50 L45,20 L60,80 L75,50 L100,50 L120,50 L135,10 L150,90 L165,50 L300,50" />
+                </svg>
+            </div>
+            <ul style="list-style: none; font-size: 1.1rem; line-height: 2;">
+                <li>「分からなかった」が「分かる」に変わる瞬間。</li>
+                <li>「怖かった」が「一歩踏み出せる」瞬間。</li>
+                <li><span class="highlight">人の心が、静かに震える瞬間。</span></li>
+            </ul>
+            <p style="margin-top: 20px;">その一瞬を生み出すことに、私は命を懸けています。</p>
+        </section>
+
+        <!-- Conclusion -->
+        <div class="footer-message fade-up">
+            <p style="font-size: 1rem; color: var(--sub-text); font-weight: normal; margin-bottom: 20px;">過去の自分へ、未来の自分へ</p>
+            <p>完璧でなくていい。<br>でも、<span class="highlight">本気でやれ。</span></p>
+            <p style="margin-top: 30px; font-size: 1.2rem;">自分で選んだことに、全力で向き合え。</p>
+        </div>
+
+    </div>
+
+    <script>
+        // Intersection Observer for Scroll Animations
+        const observerOptions = {
+            threshold: 0.2,
+            rootMargin: "0px 0px -50px 0px"
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                    
+                    // Trigger AI excuse animation if applicable
+                    if (entry.target.querySelector('#excuse-list')) {
+                        animateExcuses();
+                    }
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.fade-up').forEach(el => {
+            observer.observe(el);
+        });
+
+        // AI Excuse Animation
+        function animateExcuses() {
+            const items = document.querySelectorAll('.excuse-item');
+            items.forEach((item, index) => {
+                setTimeout(() => {
+                    item.classList.add('erased');
+                    item.querySelector('.status').textContent = 'SOLVED';
+                }, index * 800 + 500);
+            });
+        }
+    </script>
+</body>
+</html>
