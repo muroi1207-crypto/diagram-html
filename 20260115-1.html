@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI安全利用ガイド：ミエールくん解説</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2563eb;
+            --secondary: #f97316;
+            --bg-light: #f8fafc;
+            --text-main: #1e293b;
+            --text-sub: #64748b;
+            --white: #ffffff;
+            --danger: #ef4444;
+            --success: #22c55e;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            background-color: var(--bg-light);
+            color: var(--text-main);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Hero Section */
+        header {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+            padding: 40px;
+        }
+
+        .hero-icon {
+            width: 120px;
+            height: 120px;
+            margin-bottom: 24px;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 16px;
+            font-weight: 700;
+        }
+
+        .hero-lead {
+            font-size: 1.2rem;
+            color: var(--text-sub);
+            max-width: 600px;
+        }
+
+        .scroll-down {
+            margin-top: 50px;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {transform: translateY(0);}
+            40% {transform: translateY(-10px);}
+            60% {transform: translateY(-5px);}
+        }
+
+        /* Sections */
+        section {
+            padding: 80px 0;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease-out;
+        }
+
+        section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        h2 {
+            font-size: 1.8rem;
+            margin-bottom: 40px;
+            text-align: center;
+            position: relative;
+            padding-bottom: 15px;
+        }
+
+        h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 4px;
+            background-color: var(--primary);
+            border-radius: 2px;
+        }
+
+        /* Metaphor Card */
+        .card {
+            background: var(--white);
+            border-radius: 24px;
+            padding: 40px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
+            margin-bottom: 40px;
+        }
+
+        .metaphor-box {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+            margin-top: 20px;
+        }
+
+        @media (max-width: 600px) {
+            .metaphor-box { flex-direction: column; text-align: center; }
+        }
+
+        .metaphor-icon {
+            flex-shrink: 0;
+            width: 80px;
+            height: 80px;
+            background: #f1f5f9;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* The 5 Forbidden List */
+        .forbidden-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .forbidden-item {
+            background: var(--white);
+            border-radius: 16px;
+            padding: 24px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .forbidden-item:hover {
+            border-color: var(--secondary);
+            transform: translateY(-5px);
+        }
+
+        .forbidden-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 12px;
+        }
+
+        .item-icon { width: 32px; height: 32px; fill: var(--secondary); }
+
+        .forbidden-title {
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+
+        .forbidden-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+            font-size: 0.95rem;
+            color: var(--text-sub);
+        }
+
+        .forbidden-item.active .forbidden-content {
+            max-height: 200px;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px dashed #e2e8f0;
+        }
+
+        /* Risk Scenario */
+        .risk-flow {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-top: 40px;
+            position: relative;
+        }
+
+        .risk-step {
+            text-align: center;
+            width: 30%;
+            z-index: 1;
+        }
+
+        .step-bubble {
+            width: 60px;
+            height: 60px;
+            background: var(--white);
+            border: 3px solid var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 15px;
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        /* Checkbox list */
+        .checklist {
+            list-style: none;
+        }
+
+        .checklist li {
+            background: var(--white);
+            margin-bottom: 12px;
+            padding: 16px 20px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+        }
+
+        .check-icon {
+            width: 24px;
+            height: 24px;
+            fill: var(--success);
+        }
+
+        /* Footer */
+        footer {
+            background: #1e293b;
+            color: #94a3b8;
+            padding: 60px 20px;
+            text-align: center;
+            margin-top: 80px;
+        }
+
+        .ref-links {
+            margin-top: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .ref-links a {
+            color: #38bdf8;
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+
+        .ref-links a:hover { text-decoration: underline; }
+
+        /* SVG Icons Styling */
+        svg { width: 100%; height: 100%; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="hero-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                <path d="M12 8v4M12 16h.01"/>
+            </svg>
+        </div>
+        <h1>AIを正しく使うための<br>「ミえない」マナー</h1>
+        <p class="hero-lead">便利なAIチャットボット。でも、あなたの入力した情報はどこへ行くか知っていますか？</p>
+        <div class="scroll-down">
+            <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="2">
+                <path d="M7 13l5 5 5-5M7 6l5 5 5-5"/>
+            </svg>
+        </div>
+    </header>
+
+    <div class="container">
+        
+        <!-- Section 1: The Mechanism -->
+        <section id="mechanism">
+            <h2>AIとの会話は「ハガキ」と同じ？</h2>
+            <div class="card">
+                <p>AIチャットボットへの入力は、誰にも見られない「密談」ではありません。実は、以下のステップで処理されています。</p>
+                <div class="metaphor-box">
+                    <div class="metaphor-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2">
+                            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                            <path d="M22 6l-10 7L2 6"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <p><strong>1. 保存:</strong> あなたの入力は運営会社のサーバーに記録されます。</p>
+                        <p><strong>2. 学習:</strong> AIをより賢くするために、開発チームが内容を確認したり、AI自身の学習データに使われたりすることがあります。</p>
+                    </div>
+                </div>
+                <p style="margin-top:20px; color:var(--text-sub); font-size:0.9rem;">※ 封筒に入れた「手紙」ではなく、配送員や仕分け担当者が見ようと思えば見られる「ハガキ」のようなものだと考えましょう。</p>
+            </div>
+        </section>
+
+        <!-- Section 2: The 5 Forbidden Categories -->
+        <section id="forbidden">
+            <h2>絶対に共有してはいけない5選</h2>
+            <p style="text-align:center; margin-bottom:30px; color:var(--text-sub);">カードをクリックして、なぜ危険かを確認しましょう。</p>
+            <div class="forbidden-grid">
+                <!-- 1. Personal -->
+                <div class="forbidden-item" onclick="this.classList.toggle('active')">
+                    <div class="forbidden-header">
+                        <div class="item-icon">
+                            <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+                        </div>
+                        <span class="forbidden-title">個人情報</span>
+                    </div>
+                    <p>氏名、住所、電話番号、メールアドレスなど</p>
+                    <div class="forbidden-content">
+                        AIが学習し、他のユーザーにあなたの個人情報を回答してしまうリスクや、なりすまし・詐欺のターゲットになる恐れがあります。
+                    </div>
+                </div>
+                <!-- 2. Business -->
+                <div class="forbidden-item" onclick="this.classList.toggle('active')">
+                    <div class="forbidden-header">
+                        <div class="item-icon">
+                            <svg viewBox="0 0 24 24"><path d="M20 6h-4V4c0-1.11-.89-2-2-2h-4c-1.11 0-2 .89-2 2v2H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-6 0h-4V4h4v2z"/></svg>
+                        </div>
+                        <span class="forbidden-title">機密情報（会社の秘密）</span>
+                    </div>
+                    <p>未公開プロジェクト、顧客リスト、契約内容など</p>
+                    <div class="forbidden-content">
+                        競合他社に戦略が漏洩したり、企業の社会的信用を失墜させたりする重大なリスクがあります。損害賠償に発展するケースも。
+                    </div>
+                </div>
+                <!-- 3. Financial -->
+                <div class="forbidden-item" onclick="this.classList.toggle('active')">
+                    <div class="forbidden-header">
+                        <div class="item-icon">
+                            <svg viewBox="0 0 24 24"><path d="M11.8 2.1c-5.4 0-9.8 4.4-9.8 9.8s4.4 9.8 9.8 9.8 9.8-4.4 9.8-9.8-4.4-9.8-9.8-9.8zm0 17.6c-4.3 0-7.8-3.5-7.8-7.8s3.5-7.8 7.8-7.8 7.8 3.5 7.8 7.8-3.5 7.8-7.8 7.8zm.5-12.7h-1v1h1v-1zm0 2h-1v5h1v-5zm0 6h-1v1h1v-1z"/></svg>
+                        </div>
+                        <span class="forbidden-title">財務・決済情報</span>
+                    </div>
+                    <p>カード番号、銀行口座、暗証番号など</p>
+                    <div class="forbidden-content">
+                        金銭的な被害に直結します。AI運営側が盗用しなくても、通信の傍受やサーバーへの攻撃により盗まれる可能性があります。
+                    </div>
+                </div>
+                <!-- 4. Medical -->
+                <div class="forbidden-item" onclick="this.classList.toggle('active')">
+                    <div class="forbidden-header">
+                        <div class="item-icon">
+                            <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                        </div>
+                        <span class="forbidden-title">医療・健康情報</span>
+                    </div>
+                    <p>病歴、診断結果、薬の処方など</p>
+                    <div class="forbidden-content">
+                        プライバシーの中でも特にデリケートな情報です。漏洩した場合、社会的差別や不利益を被るリスクが非常に高いです。
+                    </div>
+                </div>
+                <!-- 5. Credentials -->
+                <div class="forbidden-item" onclick="this.classList.toggle('active')">
+                    <div class="forbidden-header">
+                        <div class="item-icon">
+                            <svg viewBox="0 0 24 24"><path d="M12.65 10C11.83 7.67 9.61 6 7 6c-3.31 0-6 2.69-6 6s2.69 6 6 6c2.61 0 4.83-1.67 5.65-4H17v4h4v-4h2v-4H12.65zM7 14c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2z"/></svg>
+                        </div>
+                        <span class="forbidden-title">パスワード・認証情報</span>
+                    </div>
+                    <p>ID、パスワード、認証コードなど</p>
+                    <div class="forbidden-content">
+                        アカウントの乗っ取りに直結します。「パスワードを考えてもらう」場合でも、現在使っているものは絶対に入力しないでください。
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 3: Risks -->
+        <section id="risk">
+            <h2>もし漏洩してしまったら？</h2>
+            <div class="card" style="border-left: 8px solid var(--danger);">
+                <div class="risk-flow">
+                    <div class="risk-step">
+                        <div class="step-bubble">1</div>
+                        <p style="font-size:0.85rem;">入力したデータが学習される</p>
+                    </div>
+                    <div style="align-self:center;">➜</div>
+                    <div class="risk-step">
+                        <div class="step-bubble">2</div>
+                        <p style="font-size:0.85rem;">別の誰かの質問への回答に混じる</p>
+                    </div>
+                    <div style="align-self:center;">➜</div>
+                    <div class="risk-step">
+                        <div class="step-bubble">3</div>
+                        <p style="font-size:0.85rem; color:var(--danger); font-weight:bold;">第三者に秘密が知られる</p>
+                    </div>
+                </div>
+                <p style="margin-top:30px; font-weight:bold; text-align:center;">「誰も見ていない」という油断が、最大の脆弱性です。</p>
+            </div>
+        </section>
+
+        <!-- Section 4: Safety Rules -->
+        <section id="rules">
+            <h2>安全に使うための3箇条</h2>
+            <ul class="checklist">
+                <li>
+                    <div class="check-icon">
+                        <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                    </div>
+                    <div>
+                        <strong>送信ボタンを押す前に「1秒」止まる</strong>
+                        <p style="font-size:0.9rem; color:var(--text-sub);">「これをハガキに書いて出せるか？」と自分に問いかけましょう。</p>
+                    </div>
+                </li>
+                <li>
+                    <div class="check-icon">
+                        <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                    </div>
+                    <div>
+                        <strong>固有名詞は「ダミー」に置き換える</strong>
+                        <p style="font-size:0.9rem; color:var(--text-sub);">「株式会社A」「田中太郎（仮）」など、特定できない表現を使います。</p>
+                    </div>
+                </li>
+                <li>
+                    <div class="check-icon">
+                        <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                    </div>
+                    <div>
+                        <strong>会社のルールを必ず確認する</strong>
+                        <p style="font-size:0.9rem; color:var(--text-sub);">個人利用はOKでも、業務での利用は禁止されている場合があります。</p>
+                    </div>
+                </li>
+            </ul>
+        </section>
+
+        <!-- Section 5: Emergency -->
+        <section id="emergency">
+            <h2>万が一、共有してしまったら</h2>
+            <div class="card">
+                <p>焦らず、以下の手順で対処しましょう（クリックで展開）。</p>
+                <div class="forbidden-item" onclick="this.classList.toggle('active')" style="margin-top:20px;">
+                    <div class="forbidden-header">
+                        <span class="forbidden-title">1. パスワード等の即時変更</span>
+                    </div>
+                    <div class="forbidden-content">
+                        漏洩したのが認証情報であれば、すぐに全ての関連サービスのパスワードを変更してください。
+                    </div>
+                </div>
+                <div class="forbidden-item" onclick="this.classList.toggle('active')">
+                    <div class="forbidden-header">
+                        <span class="forbidden-title">2. 会社への速やかな報告</span>
+                    </div>
+                    <div class="forbidden-content">
+                        業務上の情報であれば、隠さずにすぐ上司やセキュリティ担当者に相談してください。初動が遅れるほど被害は拡大します。
+                    </div>
+                </div>
+                <div class="forbidden-item" onclick="this.classList.toggle('active')">
+                    <div class="forbidden-header">
+                        <span class="forbidden-title">3. 履歴の削除依頼</span>
+                    </div>
+                    <div class="forbidden-content">
+                        チャット履歴の削除機能を使ってください。ただし、すでに学習サーバーに送られている場合もあるため、万全ではありません。
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <footer>
+        <p>&copy; 2024 何でも図解：ミエールくんv1</p>
+        <div class="ref-links">
+            <p>【参考資料】</p>
+            <a href="https://openai.com/policies/privacy-policy" target="_blank">OpenAI Privacy Policy</a>
+            <a href="https://www.soumu.go.jp/main_sosiki/cybersecurity/kokumin/index.html" target="_blank">総務省：国民のためのサイバーセキュリティサイト</a>
+            <a href="https://www.cas.go.jp/jp/seisaku/ai_senryaku/index.html" target="_blank">内閣府：AI戦略会議 資料</a>
+        </div>
+    </footer>
+
+    <script>
+        // Intersection Observer for scroll animations
+        const observerOptions = {
+            threshold: 0.1
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('section').forEach(section => {
+            observer.observe(section);
+        });
+    </script>
+</body>
+</html>
