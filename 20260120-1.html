@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>人前で話す実践マニュアル - ミエールくん</title>
+    <style>
+        :root {
+            --bg-color: #f8fafc;
+            --primary: #1e293b;
+            --secondary: #0d9488;
+            --accent: #f97316;
+            --text-main: #334155;
+            --text-light: #64748b;
+            --white: #ffffff;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header Area */
+        header {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            background: linear-gradient(135deg, var(--primary) 0%, #334155 100%);
+            color: var(--white);
+            padding: 40px;
+            margin-bottom: 50px;
+            clip-path: polygon(0 0, 100% 0, 100% 90%, 0 100%);
+        }
+
+        .hero-icon {
+            width: 80px;
+            height: 80px;
+            margin-bottom: 20px;
+            fill: var(--secondary);
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            letter-spacing: -0.02em;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            max-width: 600px;
+        }
+
+        /* Scroll Animation Class */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease-out;
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Section Styling */
+        section {
+            padding: 60px 0;
+            margin-bottom: 40px;
+        }
+
+        .section-title {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-size: 1.8rem;
+            color: var(--primary);
+            margin-bottom: 30px;
+            border-left: 5px solid var(--secondary);
+            padding-left: 15px;
+        }
+
+        /* Card Styling */
+        .card {
+            background: var(--white);
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            margin-bottom: 20px;
+        }
+
+        /* Specific Visual Elements */
+        .process-flow {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            position: relative;
+        }
+
+        .process-step {
+            display: flex;
+            align-items: flex-start;
+            gap: 20px;
+            background: var(--white);
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .step-num {
+            background: var(--secondary);
+            color: var(--white);
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-shrink: 0;
+            font-weight: bold;
+        }
+
+        .infographic-box {
+            background: #f1f5f9;
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 15px;
+            border: 2px dashed var(--secondary);
+        }
+
+        /* Accordion */
+        .accordion {
+            margin-top: 20px;
+        }
+
+        .accordion-item {
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            overflow: hidden;
+        }
+
+        .accordion-header {
+            background: #f8fafc;
+            padding: 15px 20px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+            transition: background 0.3s;
+        }
+
+        .accordion-header:hover {
+            background: #f1f5f9;
+        }
+
+        .accordion-content {
+            padding: 0;
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.3s ease-out;
+            background: var(--white);
+        }
+
+        .accordion-content.open {
+            padding: 20px;
+            max-height: 500px;
+        }
+
+        /* Comparison Table */
+        .grid-compare {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .compare-box {
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .compare-box.bad { background: #fee2e2; border: 1px solid #ef4444; }
+        .compare-box.good { background: #dcfce7; border: 1px solid #22c55e; }
+
+        footer {
+            background: var(--primary);
+            color: var(--white);
+            padding: 60px 20px;
+            text-align: center;
+            margin-top: 100px;
+        }
+
+        .ref-links {
+            margin-top: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            font-size: 0.9rem;
+        }
+
+        .ref-links a {
+            color: var(--secondary);
+            text-decoration: none;
+        }
+
+        .ref-links a:hover {
+            text-decoration: underline;
+        }
+
+        svg {
+            display: block;
+        }
+
+        @media (max-width: 600px) {
+            h1 { font-size: 1.8rem; }
+            .grid-compare { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <svg class="hero-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z" fill="currentColor"/>
+        <path d="M19 10v2a7 7 0 0 1-14 0v-2M12 19v4m-4 0h8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    <h1>人前で話す技術</h1>
+    <p class="subtitle">緊張は消さなくていい。徹底的な準備で「自動操縦」の状態を作る。誰でも実践できる最強のマニュアル。</p>
+</header>
+
+<div class="container">
+
+    <!-- Section 0: The Mindset -->
+    <section class="reveal">
+        <h2 class="section-title">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+            0. 緊張の正体を知る
+        </h2>
+        <div class="card">
+            <p>「緊張」は脳が本気で戦おうとしているサイン。消そうとするのは逆効果です。</p>
+            <div class="infographic-box">
+                <strong>緊張してもパフォーマンスを出す唯一の鍵：</strong>
+                <p style="margin-top:10px; color: var(--secondary); font-weight: bold; font-size: 1.2rem;">
+                    本番の自分を「信じない」こと
+                </p>
+                <p style="font-size: 0.9rem; margin-top: 5px;">本番はパニックになる前提で、準備の段階ですべてを仕組み化します。</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 1: Preparation -->
+    <section class="reveal">
+        <h2 class="section-title">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 1 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+            1. 準備フェーズ：狂ったように備える
+        </h2>
+        <div class="process-flow">
+            <div class="process-step">
+                <div class="step-num">1</div>
+                <div>
+                    <strong>原稿を1文字残さず作る</strong>
+                    <p style="font-size: 0.9rem;">「自分の言葉で話せなくなる」は甘え。まずは完璧な設計図を書きます。</p>
+                </div>
+            </div>
+            <div class="process-step">
+                <div class="step-num">2</div>
+                <div>
+                    <strong>原稿を「覚える」のではなく「染み込ませる」</strong>
+                    <p style="font-size: 0.9rem;">声に出して読み、自分の身体が言葉に馴染むまで繰り返します。</p>
+                </div>
+            </div>
+            <div class="process-step">
+                <div class="step-num">3</div>
+                <div>
+                    <strong>時間を徹底的に測る</strong>
+                    <p style="font-size: 0.9rem;">1分間300〜350文字を目安に。短すぎる・長すぎるは準備不足の証拠。</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="accordion">
+            <div class="accordion-item">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <span>なぜ「原稿」が必要なのか？</span>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 9l-7 7-7-7"/></svg>
+                </div>
+                <div class="accordion-content">
+                    <p>脳の「ワーキングメモリ」を空けるためです。原稿が完璧であれば、脳は「次に何を話そう」と悩む必要がなくなります。その分、聞き手の表情を見たり、間に注意を払ったりする余裕が生まれます。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 2: Techniques -->
+    <section class="reveal">
+        <h2 class="section-title">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            2. 本番の技術：コントロールするのは「時間」
+        </h2>
+        <div class="card">
+            <p>技術の核心は**「ゆっくり話す」**と**「間（ま）を置く」**ことだけです。</p>
+            
+            <div class="grid-compare">
+                <div class="compare-box bad">
+                    <strong>話し手の感覚</strong>
+                    <p style="font-size: 0.8rem; margin-top: 10px;">沈黙が怖い。<br>1秒でも空くと不安。<br>早く終わらせたい。</p>
+                </div>
+                <div class="compare-box good">
+                    <strong>聞き手の感覚</strong>
+                    <p style="font-size: 0.8rem; margin-top: 10px;">間があるから理解できる。<br>ゆっくりだと信頼できる。<br>説得力を感じる。</p>
+                </div>
+            </div>
+
+            <div class="infographic-box" style="border-style: solid; border-color: var(--accent);">
+                <strong>実践テクニック：</strong>
+                <ul style="margin-left: 20px; margin-top: 10px; font-size: 0.95rem;">
+                    <li><strong>1分間に300文字</strong>を目指す（体感的には驚くほど遅い）。</li>
+                    <li>重要なポイントの前後で<strong>3秒止まる</strong>。</li>
+                    <li>語尾をハッキリ。ボソボソしない。</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 3: Trouble Handling -->
+    <section class="reveal">
+        <h2 class="section-title">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+            3. 救済措置：ミスをした時こそ冷静に
+        </h2>
+        <div class="card">
+            <p>話が飛んだり、噛んだりしても、聴衆はそれ自体であなたを評価しません。一番のストレスは**「話し手がパニックになる姿」**を見ることです。</p>
+            
+            <div class="accordion">
+                <div class="accordion-item">
+                    <div class="accordion-header" onclick="toggleAccordion(this)">
+                        <span>魔法のフレーズ：「言い直します」</span>
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 9l-7 7-7-7"/></svg>
+                    </div>
+                    <div class="accordion-content">
+                        <p>「すみません、緊張して飛んでしまいました。確認して言い直します」と堂々と言えば、会場はむしろ味方になります。準備をやりきったという自信があれば、この一言が自然に出ます。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+</div>
+
+<footer>
+    <div class="container">
+        <h3>💡 緊張してもいい。準備さえしていれば、言葉は必ず届く。</h3>
+        <p style="margin-top: 20px; opacity: 0.8;">このマニュアルは、プレゼン、会議、日常の報告、あらゆる「人前」で使えます。</p>
+        
+        <div class="ref-links">
+            <strong>参考資料：</strong>
+            <a href="#">TED: How to speak so that people want to listen</a>
+            <a href="#">Carnegie: The Quick and Easy Way to Effective Speaking</a>
+            <a href="#">Harvard Business Review: How to Give a Killer Presentation</a>
+        </div>
+        
+        <p style="margin-top: 40px; font-size: 0.8rem; opacity: 0.6;">&copy; 2024 何でも図解：ミエールくんv1</p>
+    </div>
+</footer>
+
+<script>
+    // Scroll Reveal Logic
+    const revealElements = document.querySelectorAll('.reveal');
+    const revealOnScroll = () => {
+        const triggerBottom = window.innerHeight * 0.85;
+        revealElements.forEach(el => {
+            const elTop = el.getBoundingClientRect().top;
+            if (elTop < triggerBottom) {
+                el.classList.add('active');
+            }
+        });
+    };
+
+    window.addEventListener('scroll', revealOnScroll);
+    window.addEventListener('load', revealOnScroll);
+
+    // Accordion Logic
+    function toggleAccordion(header) {
+        const content = header.nextElementSibling;
+        const icon = header.querySelector('svg');
+        
+        // Close others (optional)
+        // document.querySelectorAll('.accordion-content').forEach(c => {
+        //     if(c !== content) c.classList.remove('open');
+        // });
+
+        content.classList.toggle('open');
+        if (content.classList.contains('open')) {
+            icon.style.transform = 'rotate(180deg)';
+        } else {
+            icon.style.transform = 'rotate(0deg)';
+        }
+    }
+</script>
+
+</body>
+</html>
